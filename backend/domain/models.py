@@ -53,7 +53,7 @@ class GasStation:
         get_petrol_instance = self._petrols.get(petrol)
         
         if get_petrol_instance == None:
-            raise BadQueryError(f'The petrol type {petrol} is not present.', self._petrols)
+            raise NoPetrolTypeFoundError(f'The petrol type {petrol} is not present.', self._petrols)
         return get_petrol_instance.price
 
     def get_googlemaps_url(self) -> str:
@@ -77,6 +77,7 @@ class BadCoordinatesError(GasStationExceptions):
     """ Raised when there is a problem with coordinates """
     pass
 
-class BadQueryError(GasStationExceptions):
+class NoPetrolTypeFoundError(GasStationExceptions):
+    """ Raised when there is no the specified PetrolType on this GasStation """
     pass
 
