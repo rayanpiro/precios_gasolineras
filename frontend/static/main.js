@@ -7,6 +7,7 @@ Vue.createApp({
         },
       }],
       url_to_save: null,
+      location: null,
     }
   },
 
@@ -27,8 +28,27 @@ Vue.createApp({
       const ccaa = this.$refs.ccaa.value
       const petrol = this.$refs.petrol.value
       const distance = this.$refs.distance.value
-      const lat = this.$refs.lat.value
-      const lon = this.$refs.lon.value
+      let lat
+      let lon
+
+      navigator.geolocation.getCurrentPosition(pos => {
+        this.location = pos
+      })
+
+      if( this.location != null ) {
+        lat = this.location.coords.latitude
+        lon = this.location.coords.longitude
+        this.$refs.lat.value = lat
+        this.$refs.lon.value = lon
+      }
+      else {
+        lat = this.$refs.lat.value
+        lon = this.$refs.lon.value
+        console.log("HI")
+      }
+
+      console.log(this.location)
+      
       const num_results = this.$refs.num_results.value
 
       query = '?'
