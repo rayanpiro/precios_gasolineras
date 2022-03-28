@@ -1,4 +1,5 @@
 from typing_extensions import Self
+from typing import Type
 
 DistanceType = float
 DurationType = str
@@ -17,29 +18,49 @@ class PetrolType:
     def price(self) -> PetrolPriceType:
         return self._price
 
+    @property
+    def __name__(self) -> str:
+        return "PetrolType"
+
 class Gas95E5(PetrolType):
-    pass
+    @property
+    def __name__(self) -> str:
+        return "Gas95E5"
 
 class Gas95E5Premium(PetrolType):
-    pass
+    @property
+    def __name__(self) -> str:
+        return "Gas95E5Premium"
 
 class Gas95E10(PetrolType):
-    pass
+    @property
+    def __name__(self) -> str:
+        return "Gas95E10"
 
 class Gas98E5(PetrolType):
-    pass
+    @property
+    def __name__(self) -> str:
+        return "Gas98E5"
 
 class Gas98E10(PetrolType):
-    pass
+    @property
+    def __name__(self) -> str:
+        return "Gas98E10"
 
 class GasOilA(PetrolType):
-    pass
+    @property
+    def __name__(self) -> str:
+        return "GasOilA"
 
 class GasOilAPremium(PetrolType):
-    pass
+    @property
+    def __name__(self) -> str:
+        return "GasOilAPremium"
 
-CoordinatesType = tuple[float, float]
-from typing import Type
+LatType = float
+LonType = float
+CoordinatesType = tuple[LatType, LonType]
+
 class GasStation:
     def __init__(self, name: str, location: str, coordinates: CoordinatesType, opening_hours: str, petrols: dict[Type[PetrolType], PetrolType]):
         self._name = name
