@@ -62,13 +62,14 @@ LonType = float
 CoordinatesType = tuple[LatType, LonType]
 
 class GasStation:
-    def __init__(self, name: str, location: str, coordinates: CoordinatesType, opening_hours: str, petrols: dict[Type[PetrolType], PetrolType]):
+    def __init__(self, name: str, location: str, ccaa: str, coordinates: CoordinatesType, opening_hours: str, petrols: dict[Type[PetrolType], PetrolType]):
         self._name = name
         self._location = location
         self._coordinates = coordinates
         self._maps_url = self.get_googlemaps_url()
         self._opening_hours = opening_hours
         self._petrols = petrols
+        self._ccaa = ccaa
 
     @property
     def name(self) -> str:
@@ -77,6 +78,10 @@ class GasStation:
     @property
     def location(self) -> str:
         return self._location
+
+    @property
+    def ccaa(self) -> str:
+        return self._ccaa
 
     @property
     def maps_url(self) -> str:
