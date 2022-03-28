@@ -1,3 +1,8 @@
+from typing_extensions import Self
+
+DistanceType = float
+DurationType = str
+
 PetrolPriceType = float
 
 class PetrolType:
@@ -5,22 +10,38 @@ class PetrolType:
     def __init__(self, price: PetrolPriceType):
         self._price = price
     
+    def __le__(self, other: Self) -> bool:
+        return self.price < other.price
+    
     @property
     def price(self) -> PetrolPriceType:
         return self._price
 
-class Gas95Octanes(PetrolType):
+class Gas95E5(PetrolType):
     pass
 
-class Gas98Octanes(PetrolType):
+class Gas95E5Premium(PetrolType):
     pass
 
-class GasOil(PetrolType):
+class Gas95E10(PetrolType):
+    pass
+
+class Gas98E5(PetrolType):
+    pass
+
+class Gas98E10(PetrolType):
+    pass
+
+class GasOilA(PetrolType):
+    pass
+
+class GasOilAPremium(PetrolType):
     pass
 
 CoordinatesType = tuple[float, float]
+from typing import Type
 class GasStation:
-    def __init__(self, name: str, location: str, coordinates: CoordinatesType, opening_hours: str, petrols: dict[PetrolType, PetrolType]):
+    def __init__(self, name: str, location: str, coordinates: CoordinatesType, opening_hours: str, petrols: dict[Type[PetrolType], PetrolType]):
         self._name = name
         self._location = location
         self._coordinates = coordinates
@@ -48,18 +69,27 @@ class GasStation:
     def opening_hours(self) -> str:
         return self._opening_hours
 
-    def price(self, petrol: PetrolType) -> PetrolPriceType:
+    @property
+    def petrol_types(self) -> list[Type[PetrolType]]:
+        return list(self._petrols.keys())
+
+    def price(self, petrol: Type[PetrolType]) -> PetrolPriceType:
         
         get_petrol_instance = self._petrols.get(petrol)
         
         if get_petrol_instance == None:
             raise NoPetrolTypeFoundError(f'The petrol type {petrol} is not present.', self._petrols)
         return get_petrol_instance.price
-
+    
     def get_googlemaps_url(self) -> str:
-        if len(self._coordinates) == 2:
-            return f'https://www.google.com/maps/search/?api=1&query={self._coordinates[0]},{self._coordinates[1]}'
-        raise BadCoordinatesError('Bad coordinates.', self._coordinates)
+        if len(self._coordinates) != 2:
+            raise BadCoordinatesError('Bad coordinates.', self._coordinates)
+        return f'https://www.google.com/maps/search/?api=1&query={self._coordinates[0]},{self._coordinates[1]}'
+    
+    def __le__(self, other: Self, petrol_criteria: Type[PetrolType]) -> bool:
+        if petrol_criteria not in self.petrol_types or petrol_criteria not in other.petrol_types:
+            raise NotImplementedError
+        return self.price(petrol_criteria) < other.price(petrol_criteria)
 
 class GasStationExceptions(Exception):
     """ Base class for other exceptions """
