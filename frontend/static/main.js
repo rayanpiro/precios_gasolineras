@@ -15,11 +15,17 @@ Vue.createApp({
     let uri = window.location.search.substring(1)
     let params = new URLSearchParams(uri)
 
+    navigator.geolocation.getCurrentPosition(pos => {
+      this.location = pos
+      this.$refs.lat.value = pos.coords.latitude
+      this.$refs.lon.value = pos.coords.longitude
+    })
+
     for( const [key,value] of params.entries()) {
       this.$refs[key].value = value
     }
     
-    this.get_stations()    
+    this.get_stations()
   },
 
   methods: {
@@ -28,24 +34,8 @@ Vue.createApp({
       const ccaa = this.$refs.ccaa.value
       const petrol = this.$refs.petrol.value
       const distance = this.$refs.distance.value
-      let lat
-      let lon
-
-      navigator.geolocation.getCurrentPosition(pos => {
-        this.location = pos
-      })
-
-      if( this.location != null ) {
-        lat = this.location.coords.latitude
-        lon = this.location.coords.longitude
-        this.$refs.lat.value = lat
-        this.$refs.lon.value = lon
-      }
-      else {
-        lat = this.$refs.lat.value
-        lon = this.$refs.lon.value
-        console.log("HI")
-      }
+      const lat = this.$refs.lat.value
+      const lon = this.$refs.lon.value
 
       console.log(this.location)
       
