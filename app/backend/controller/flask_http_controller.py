@@ -28,7 +28,6 @@ def get_stations(num_of_results: int | None = None) -> str:
     lat: LatType | None = request.args.get("lat", type=LatType)
     lon: LonType | None = request.args.get("lon", type=LonType)
 
-    print(ccaa, distance, lat, lon, petrol_type)
     gas_station_service.get_stations().filter_by_ccaa(ccaa).filter_by_distance(distance, lat, lon).sort_by_price(petrol_type)
 
     return jsonify( gas_station_service.collect_json(num_of_results)) # type: ignore
